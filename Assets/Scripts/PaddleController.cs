@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IPaddleController
+public class PaddleController : MonoBehaviour, IPaddleController
 {
-    public int Speed = 1;
+    public float Speed = 2.5f;
 
     public Transform Position;
     public Rigidbody2D HitBox;
@@ -30,22 +30,5 @@ public class PlayerController : MonoBehaviour, IPaddleController
             return;
         }
         Position.Translate(0, Speed * Time.deltaTime, 0);
-    }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            Up();
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            Down();
-        }
     }
 }
