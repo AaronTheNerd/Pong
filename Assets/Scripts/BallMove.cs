@@ -25,4 +25,11 @@ public class BallMove : MonoBehaviour
     {
 
     }
+
+         private void OnControllerColliderHit(ControllerColliderHit hit) {
+    
+        float dist = this.transform.position.y - GameObject.Find ("Player1").transform.position.y;
+
+        print(dist);
+    }
 }
