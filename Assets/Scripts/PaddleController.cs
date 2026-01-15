@@ -1,34 +1,38 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PaddleController : MonoBehaviour, IPaddleController
 {
-    public float Speed = 2.5f;
+    public float speed = 2.5f;
+    public BoxCollider2D bottomBoundary;
+    public BoxCollider2D topBoundary;
 
-    public Transform Position;
-    public Rigidbody2D HitBox;
-    public BoxCollider2D BottomBoundary;
-    public BoxCollider2D TopBoundary;
+    private Rigidbody2D _rigidBody;
 
-    public bool CanGoDown() => !HitBox.IsTouching(BottomBoundary);
-    public bool CanGoUp() => !HitBox.IsTouching(TopBoundary);
+    private void Start() => _rigidBody = GetComponent<Rigidbody2D>();
+
+    public bool CanGoDown() => !_rigidBody.IsTouching(bottomBoundary);
+
+    public bool CanGoUp() => !_rigidBody.IsTouching(topBoundary);
+
     public void Down()
     {
         if (!CanGoDown())
         {
             return;
         }
-        Position.Translate(0, -Speed * Time.deltaTime, 0);
+        transform.Translate(0, -speed * Time.deltaTime, 0);
     }
+
     public void Up()
     {
         if (!CanGoUp())
         {
             return;
         }
-        Position.Translate(0, Speed * Time.deltaTime, 0);
+        transform.Translate(0, speed * Time.deltaTime, 0);
     }
 }

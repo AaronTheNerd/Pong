@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PaddleController))]
 public class Player : MonoBehaviour
 {
-    public PaddleController Controller;
+    private PaddleController _controller;
 
-    // Start is called before the first frame update
-    void Start() { }
+    private void Start() => _controller = GetComponent<PaddleController>();
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            Controller.Down();
+            _controller.Down();
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            Controller.Up();
+            _controller.Up();
         }
     }
 }
