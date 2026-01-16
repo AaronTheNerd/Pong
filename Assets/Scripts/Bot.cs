@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PaddleController))]
+[RequireComponent(typeof(IPaddleController))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bot : MonoBehaviour
 {
     public float precision = 0.5f;
     public Rigidbody2D ball;
 
-    private PaddleController _controller;
+    private IPaddleController _controller;
     private Rigidbody2D _rigidBody;
 
     private void Start()
     {
-        _controller = GetComponent<PaddleController>();
+        _controller = GetComponent<IPaddleController>();
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
