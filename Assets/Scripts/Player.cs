@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PaddleController))]
+[RequireComponent(typeof(IPaddleController))]
 public class Player : MonoBehaviour
 {
-    private PaddleController _controller;
+    private IPaddleController _controller;
 
-    private void Start() => _controller = GetComponent<PaddleController>();
+    private void Start() => _controller = GetComponent<IPaddleController>();
 
     private void Update()
     {
