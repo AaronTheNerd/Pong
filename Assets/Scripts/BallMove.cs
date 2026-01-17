@@ -2,34 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+enum BallState
+{
+    IDLE,
+    MOVING
+}
+
+[RequireComponent(typeof(Rigidbody2D))]
 public class BallMove : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float speed = 5.0f;
+    public float idleSeconds = 0.5f;
+    public float bounceAcceleration = 1.1f;
+
+    private Rigidbody2D _rigidBody;
+    private BallState _state;
+    private float _startTime;
+
+    private void Start()
     {
-        int rand = Random.Range(0, 2);
-
-        if (rand == 0)
-        {
-            this.GetComponent<Rigidbody2D>().velocity = new Vector2(-5f, 0f);
-
-        } else if (rand == 1)
-        {
-            this.GetComponent<Rigidbody2D>().velocity = new Vector2(5f, 0f);
-        }
-            
-        }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        _state = BallState.IDLE;
+        _startTime = Time.timeSinceLevelLoad;
+        _rigidBody = GetComponent<Rigidbody2D>();
     }
 
-         private void OnControllerColliderHit(ControllerColliderHit hit) {
-    
-        float dist = this.transform.position.y - GameObject.Find ("Player1").transform.position.y;
+    private void Update()
+    {
+        if (_state == BallState.IDLE)
+        {
+            HandleIdle();
+        }
+    }
 
+    private void HandleIdle()
+    {
+        if (Time.timeSinceLevelLoad - _startTime >= idleSeconds)
+        {
+            BeginMoving();
+        }
+    }
+
+    private void BeginMoving()
+    {
+        _state = BallState.MOVING;
+        _rigidBody.velocity = transform.rotation * Vector3.up * speed;
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        float dist = transform.position.y - GameObject.Find("Player1").transform.position.y;
         print(dist);
     }
 }
