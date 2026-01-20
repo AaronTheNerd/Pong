@@ -4,20 +4,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
-public class pausemenu : MonoBehaviour
+[RequireComponent(typeof(Canvas))]
+public class Pausemenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public void LoadMainmenu()
+    private Canvas _canvasObject;
+
+    private void Start()
     {
-        SceneManager.LoadScene(0);
+        _canvasObject = GetComponent<Canvas>();
+        _canvasObject.enabled = false;
+
     }
-    public void OnTriggerEnter()
+    private void Update()
     {
-        //Canvas.SetActive(true);
-    } 
-    public void OnTriggerExit()
-    {
-        //canvasTrigger.SetActive(false);
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            _canvasObject.enabled = !_canvasObject.enabled;
+            Time.timeScale = _canvasObject.enabled? 0:1;
+        }
     }
 }
