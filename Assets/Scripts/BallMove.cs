@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
+using UnityEditor.Callbacks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 enum BallState
@@ -18,12 +21,14 @@ public class BallMove : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private BallState _state;
     private float _startTime;
+    Vector2 Direction;
 
     private void Start()
     {
         _state = BallState.IDLE;
         _startTime = Time.timeSinceLevelLoad;
         _rigidBody = GetComponent<Rigidbody2D>();
+        Direction = Vector2.one.normalized;
     }
 
     private void Update()
@@ -32,6 +37,11 @@ public class BallMove : MonoBehaviour
         {
             HandleIdle();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        _rigidBody.velocity = Direction * speed;
     }
 
     private void HandleIdle()
@@ -46,6 +56,18 @@ public class BallMove : MonoBehaviour
     {
         _state = BallState.MOVING;
         _rigidBody.velocity = transform.rotation * Vector3.up * speed;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("wall"))
+        {
+            Direction.y = -Direction.y;
+        }
+        else if(collision.gameObject.CompareTag("Paddle"))
+        {
+            Direction.x = -Direction.x;
+        }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
