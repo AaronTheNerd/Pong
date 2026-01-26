@@ -41,7 +41,10 @@ public class BallMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidBody.velocity = _direction * speed;
+        if (_state == EBallState.MOVING)
+        {
+            _rigidBody.velocity = _direction * speed;
+        }
     }
 
     private Vector2 StartingDirection()
@@ -61,7 +64,6 @@ public class BallMove : MonoBehaviour
     private void BeginMoving()
     {
         _state = EBallState.MOVING;
-        _rigidBody.velocity = transform.rotation * Vector3.up * speed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
