@@ -1,11 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
 using UnityEditor.Callbacks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-enum BallState
+internal enum EBallState
 {
     IDLE,
     MOVING
@@ -19,21 +19,21 @@ public class BallMove : MonoBehaviour
     public float bounceAcceleration = 1.1f;
 
     private Rigidbody2D _rigidBody;
-    private BallState _state;
+    private EBallState _state;
     private float _startTime;
-    Vector2 Direction;
+    private Vector2 _direction;
 
     private void Start()
     {
-        _state = BallState.IDLE;
+        _state = EBallState.IDLE;
         _startTime = Time.timeSinceLevelLoad;
         _rigidBody = GetComponent<Rigidbody2D>();
-        Direction = Vector2.one.normalized;
+        _direction = StartingDirection();
     }
 
     private void Update()
     {
-        if (_state == BallState.IDLE)
+        if (_state == EBallState.IDLE)
         {
             HandleIdle();
         }
@@ -41,7 +41,13 @@ public class BallMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidBody.velocity = Direction * speed;
+        _rigidBody.velocity = _direction * speed;
+    }
+
+    private Vector2 StartingDirection()
+    {
+        float angle = Random.Range(45f, 135f);
+        return Quaternion.Euler(0, 0, angle) * Vector2.up;
     }
 
     private void HandleIdle()
@@ -54,7 +60,7 @@ public class BallMove : MonoBehaviour
 
     private void BeginMoving()
     {
-        _state = BallState.MOVING;
+        _state = EBallState.MOVING;
         _rigidBody.velocity = transform.rotation * Vector3.up * speed;
     }
 
@@ -62,12 +68,13 @@ public class BallMove : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("wall"))
         {
-            Direction.y = -Direction.y;
+            _direction.y *= -1;
         }
-        else if(collision.gameObject.CompareTag("Paddle"))
+        else if (collision.gameObject.CompareTag("Paddle"))
         {
-            Direction.x = -Direction.x;
+            _direction.x *= -1;
         }
+        speed *= bounceAcceleration;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
